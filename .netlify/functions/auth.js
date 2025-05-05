@@ -1,6 +1,6 @@
 const validKeys = new Map([
     ["pass", "user"],
-    ["chase123", "Chase@chase.com"]
+    ["chase123", "Chase@chase.com"],
 ]);
 
 const userDevices = new Map();

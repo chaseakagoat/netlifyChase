@@ -1,8 +1,17 @@
 const validKeys = new Map([
-    ["pass", "user"],
-    ["chase123", "Chase@chase.com"],
+    ["butthole", "UserName1"],
+    ["loltest", "UserName1"],
+    ["yakshop", "Yakshop"],
+    ["appstwin", "Appshop"],
+    ["kicksmanz", "Kickshop"],
+    ["senseiyolo", "Sensei Yolo"],
+    ["jaykwi", "test"],
+    ["jaykwichase", "test"],
+    ["jaykwi", "jaykwi@chase.com"],
+
 ]);
 
+// Add a map to track device IDs for each username
 const userDevices = new Map();
 
 exports.handler = async (event, context) => {
@@ -16,7 +25,9 @@ exports.handler = async (event, context) => {
     try {
         const { key, deviceId } = JSON.parse(event.body);
         
+        // Check if the key exists
         if (!validKeys.has(key)) {
+            // Check if this device was previously authorized for any user
             for (let [username, devices] of userDevices) {
                 if (devices.has(deviceId)) {
                     return {
@@ -40,11 +51,13 @@ exports.handler = async (event, context) => {
         
         const username = validKeys.get(key);
         
+        // Store the device ID for this user
         if (!userDevices.has(username)) {
             userDevices.set(username, new Set());
         }
         userDevices.get(username).add(deviceId);
         
+        // Remove the key after first use
         validKeys.delete(key);
         
         return {

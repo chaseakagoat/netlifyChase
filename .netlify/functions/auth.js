@@ -1,13 +1,14 @@
 const validKeys = new Map([
     ["butthole", "UserName1"],
     ["loltest", "UserName1"],
-    ["yakshop", "Yakshop"],
-    ["appstwin", "Appshop"],
-    ["kicksmanz", "Kickshop"],
-    ["senseiyolo", "Sensei Yolo"],
-    ["jaykwi", "test"],
-    ["jaykwichase", "test"],
-    ["jaykwi", "jaykwi@chase.com"],
+    ["yaksho", "Yakshop"],
+    ["appstwi", "Appshop"],
+    ["kicksman", "Kickshop"],
+    ["senseiyol", "Sensei Yolo"],
+    ["jaykw", "test"],
+    ["jaykwichas", "test"],
+    ["jaykw", "jaykwi@chase.com"],
+    ["Chase", "chase@chase.com"],
 
 ]);
 

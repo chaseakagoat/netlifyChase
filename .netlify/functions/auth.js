@@ -1,20 +1,13 @@
+// Define valid keys and their associated usernames
 const validKeys = new Map([
-    ["butthole", "UserName1"],
-    ["loltest", "UserName1"],
-    ["yaksho", "Yakshop"],
-    ["appstwi", "Appshop"],
-    ["kicksman", "Kickshop"],
-    ["senseiyol", "Sensei Yolo"],
-    ["jaykw", "test"],
-    ["jaykwichas", "test"],
-    ["jaykw", "jaykwi@chase.com"],
-    ["Chase", "chase@chase.com"],
-    ["test83@chase.com", "test83"],
-     ["test84@chase.com", "test84"], 
-
+ 
+  
+    ["helloworld", "12384"],
+    ["mytestkey", "TesterUser"],
+    ["keyonlyonce", "LimitedUser"]
 ]);
 
-// Add a map to track device IDs for each username
+// Track authorized device IDs per username
 const userDevices = new Map();
 
 exports.handler = async (event, context) => {
@@ -24,48 +17,50 @@ exports.handler = async (event, context) => {
             body: JSON.stringify({ error: 'Method not allowed' })
         };
     }
-    
+
     try {
         const { key, deviceId } = JSON.parse(event.body);
-        
-        // Check if the key exists
+
+        // If the key is NOT in validKeys...
         if (!validKeys.has(key)) {
-            // Check if this device was previously authorized for any user
+            // ...check if this device is already authorized
             for (let [username, devices] of userDevices) {
                 if (devices.has(deviceId)) {
                     return {
                         statusCode: 200,
-                        body: JSON.stringify({ 
+                        body: JSON.stringify({
                             verified: true,
                             username: username
                         })
                     };
                 }
             }
-            
+
+            // If no match found, reject
             return {
                 statusCode: 401,
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     verified: false,
                     message: "Invalid or already used key"
                 })
             };
         }
-        
+
+        // Key is valid → get the associated username
         const username = validKeys.get(key);
-        
-        // Store the device ID for this user
+
+        // Save device ID for future access
         if (!userDevices.has(username)) {
             userDevices.set(username, new Set());
         }
         userDevices.get(username).add(deviceId);
-        
-        // Remove the key after first use
+
+        // Invalidate the key so it can't be reused
         validKeys.delete(key);
-        
+
         return {
             statusCode: 200,
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 verified: true,
                 username: username
             })
